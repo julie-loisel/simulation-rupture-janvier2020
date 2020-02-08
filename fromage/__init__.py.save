@@ -1,0 +1,3 @@
+from fromage.objects import palette, produit
+from fromage.calculs import construct_T_air
+__all__ = ["palette","produit"]
