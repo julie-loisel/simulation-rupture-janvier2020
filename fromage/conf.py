@@ -1,33 +1,4 @@
-Skip to content
-Search or jump to…
 
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@juju1618 
-Learn Git and GitHub without any code!
-Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
-
-
-svickn
-/
-sphinx-example
-1
-00
- Code Issues 0 Pull requests 0 Actions Projects 0 Wiki Security Insights
-sphinx-example/conf.py
-@vicknairs vicknairs Added basic content for example.
-7df2625 on 8 Feb 2017
-156 lines (118 sloc)  4.67 KB
-  
-Code navigation is available!
-Navigate your code with ease. Click on function and method calls to jump to their definitions or references in the same repository. Learn more
-
- Code navigation is available for this repository but data for this commit does not exist.
-
-Learn more or give us feedback
 # -*- coding: utf-8 -*-
 #
 # Sphinx Example documentation build configuration file, created by
