@@ -13,7 +13,7 @@ from plotly.offline import init_notebook_mode, iplot
 from fromage import *
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app = dash.Dash(Ruptures, external_stylesheets=external_stylesheets)
 server = app.server
 
 #colors ={'background':'#111111','text':'#7FDBFF'}
