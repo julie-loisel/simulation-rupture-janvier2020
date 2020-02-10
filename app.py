@@ -26,7 +26,7 @@ app.layout = html.Div([
     html.Div([
         #############Coté gauche###########
     dcc.Markdown('''### Construction de la palette'''),
-    dcc.Markdown('''Deuxième version d'une application implémentée en Python par Julie Loisel
+    dcc.Markdown('''Premièreversion d'une application implémentée en Python par Julie Loisel
     utilisant le modèle codé en Matlab par Denis Flick (AgroParisTech)
     et repris par Steven Duret(IRSTEA).
     '''),
