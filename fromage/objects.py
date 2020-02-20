@@ -34,3 +34,39 @@ class produit:
         self.h=h #W m-2 °C-1 ; coefficient d'échange convectif
         self.mp=poids*Nproduit/palette.nb_zones#% kg - masse produit par zone 
         self.rho=rho
+
+class chaine:
+    def __init__(self, stages=["plateforme","camion","chambre"], donnees="derens_2009"):
+        self.stages=stages
+        self.donnees=donnees
+        self.dict_donnees={
+            'ANIA':{'transport':\
+                             {'duree':{'loi':'exponential','lambda':0.2},
+                              'intensite':{'loi':'normal','loc':2.9,'scale':1.4}},\
+                          'warehouse':\
+                              {'duree':{'loi':'exponential','lambda':3.2},
+                              'intensite':{'loi':'normal','loc':2.3,'scale':0.8}}, \
+                          'platform': \
+                              {'duree': {'loi':'exponential', 'lambda':1.2},
+                              'intensite': {'loi':'normal', 'loc':3.2, 'scale':1.3}}, \
+                          'cold_room': \
+                              {'duree': {'loi': 'exponential', 'lambda': 1.6},
+                              'intensite': {'loi': 'normal', 'loc': 3.4, 'scale': 1.7}
+                            }
+        },
+        'derens_2009': {'transport':\
+                             {'duree':{'loi':'exponential','lambda':0.076},
+                              'intensite':{'loi':'normal','loc':3.6,'scale':2.7}},\
+                          'warehouse':\
+                              {'duree':{'loi':'exponential','lambda':0.7},
+                              'intensite':{'loi':'normal','loc':3.6,'scale':2.8}}, \
+                          'platform': \
+                              {'duree': {'loi':'exponential', 'lambda':0.49},
+                              'intensite': {'loi':'normal', 'loc':2.9, 'scale':2.9}}, \
+                          'cold_room': \
+                              {'duree': {'loi':'exponential', 'lambda':0.95},
+                              'intensite': {'loi':'normal', 'loc':4.4, 'scale':1.9}}
+        }
+                        }
+
+

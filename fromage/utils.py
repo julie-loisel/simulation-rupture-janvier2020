@@ -64,7 +64,27 @@ def construct_T_air_bis(dt,Ta,debut_t1,durees,pauses,temperatures):
     
     T=np.arange(0,60*t_tot,dt)
     
-    return T,T_air 
+    return T,T_air
+
+def generate(dict_loi):
+    if dict_loi["loi"]=="normal":
+        return np.random.normal(loc=dict_loi["loc"],scale=dict_loi["scale"])
+    if dict_loi["loi"]=="exponential":
+        return np.random.exponential(scale=dict_loi["lambda"])
+
+def constructT_air_sans_rupture_chaine(chaine,dt=30):
+    T_air = np.array([])
+    t_tot = 0
+    stages = chaine.stages
+    dict_donnees = chaine.dict_donnees[chaine.donnees]
+    for stage in stages:
+        T = generate(dict_donnees[stage]["intensite"])
+        t = generate(dict_donnees[stage]["duree"]) * 3600*24
+        T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
+        t_tot = t_tot + int(t / dt) * dt
+    T = np.arange(0, t_tot, dt)
+    return T, T_air
+
 
 def constructT_air_sans_rupture(dt=30):
     
@@ -79,7 +99,20 @@ def constructT_air_sans_rupture(dt=30):
     T=np.arange(0,t_tot,dt)
     return T,T_air
 
-def constructT_air_avec_rupture(dt=30,lambda_rupture=2.05):
+
+def constructT_air_abus(dt=30):
+    T_plateforme, t_plateforme = np.random.normal(loc=3.4, scale=1.4), np.random.exponential(1.05) * 3600 * 24
+    T_camion, t_camion = np.random.normal(loc=12, scale=4), np.random.exponential(0.25) * 3600 * 24
+    T_chambre, t_chambre = np.random.normal(loc=3.4, scale=1.4), np.random.exponential(1.05) * 3600 * 24
+    T_air = np.array([])
+    t_tot = 0
+    for T, t in zip([T_plateforme, T_camion, T_chambre], [t_plateforme, t_camion, t_chambre]):
+        T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
+        t_tot = t_tot + int(t / dt) * dt
+    T = np.arange(0, t_tot, dt)
+    return T, T_air
+
+def constructT_air_avec_rupture(dt=30,lambda_rupture=1.5):
     """lambda_rupture: paramètre de la loi exponentielle qui génère la durée de la rupture
     """
     T_plateforme,t_plateforme=np.random.normal(loc=3.4,scale=1.4),np.random.exponential(1.05)*3600*24
@@ -94,13 +127,36 @@ def constructT_air_avec_rupture(dt=30,lambda_rupture=2.05):
         t_tot=t_tot+Temps*dt
         if rupture==r:
             temp_rupture=np.random.randint(6,25)
-            Temps_rupture=np.random.exponential(lambda_rupture)*3600
+            Temps_rupture=np.random.exponential(lambda_rupture)*3600*24
             Temps=int(Temps_rupture/dt)
             T_air=np.concatenate([T_air,temp_rupture*np.ones(Temps)])
             t_tot=t_tot+Temps*dt
     T=np.arange(0,t_tot,dt)
     return T,T_air
-    
+
+
+def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.01):
+    """lambda_rupture: paramètre de la loi exponentielle qui génère la durée de la rupture
+    """
+    T_air=np.array([])
+    t_tot=0
+    rupture=np.random.randint(0,len(chaine.stages)-1)
+    stages = chaine.stages
+    dict_donnees = chaine.dict_donnees[chaine.donnees]
+    for r,stage in enumerate(stages):
+        T = generate(dict_donnees[stage]["intensite"])
+        t = generate(dict_donnees[stage]["duree"])* 3600*24
+        T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
+        t_tot = t_tot + int(t / dt) * dt
+        if rupture==r:
+            temp_rupture=np.random.randint(6,25)
+            Temps_rupture=np.random.exponential(lambda_rupture)*3600*24
+            Temps=int(Temps_rupture/dt)
+            T_air=np.concatenate([T_air,temp_rupture*np.ones(Temps)])
+            t_tot=t_tot+Temps*dt
+    T=np.arange(0,t_tot,dt)
+    return T,T_air
+
 def init_pression(palette,produit,Vfr=0.31,e=0,f=0,Pa=1):
     I,J=palette.I,palette.J
     rho=produit.rho

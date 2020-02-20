@@ -2,6 +2,8 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
+import base64
+
 import fromage
 import plotly
 import plotly.graph_objects as go
@@ -21,6 +23,8 @@ colors = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
+image_filename = 'assets/palette.png' # replace with your own image
+encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 app.config['suppress_callback_exceptions']=True
 app.layout = html.Div([
     html.Div([
@@ -65,15 +69,35 @@ dcc.Markdown('''##### Calculer la conduction'''),
             ],
             value=1
         ),
+        dcc.RadioItems(id='donnees',
+                       options=[
+                           {'label': "ANIA", 'value': 'ANIA'},
+                           {'label': "Morelli and Derens (2009)", 'value': 'derens_2009'}
+                       ],
+                       value='ANIA'
+                       )
+        ,
+dcc.Dropdown(
+    id='stages',
+    options=[
+        {'label': 'Transport', 'value': 'transport'},
+        {'label': 'Warehouse', 'value': 'warehouse'},
+        {'label': 'Platform', 'value': 'platform'},
+        {'label': 'Cold room', 'value': 'cold_room'}
+    ],
+    value=['platform', 'transport','cold_room'],
+    multi=True
+),
+
         dcc.Markdown('''##### Ruptures'''),
         dcc.RadioItems(id='ruptures',
             options=[
-                {'label': 'Aléatoires', 'value': 'alea'},
-                {'label': 'Scénario 1: 3 ruptures', 'value': '1'},
-                {'label': 'Scénario 2: 4 ruptures', 'value': '2'},
+                {'label': "Scénario 1 : Rupture d'interface", 'value': 'interface'},
+                {'label': "Scénario 2 : Pas de rupture", 'value': 'no'},
+                {'label': "Scénario 3 : Abus (panne ou mauvaise gestion", 'value': 'abuse'},
 
             ],
-            value='alea'
+            value='interface'
         )
     ],style={'font-size':'72.5%','width':'23%','display':'inline-block'}),
 ##### RUPTURES #####
@@ -133,7 +157,8 @@ dcc.Markdown('''##### Calculer la conduction'''),
 
         [
         dcc.Graph(
-        id='basic-interactions')
+        id='basic-interactions'),
+    html.Img(src='data:image/png;base64,{}'.format(encoded_image))
         ]
         ,style={'width':'100%','display':'inline-block'})
     
@@ -153,38 +178,30 @@ dcc.Markdown('''##### Calculer la conduction'''),
      dash.dependencies.State('C_vent','value'),\
             dash.dependencies.State('Vfr','value'),\
             dash.dependencies.State('conduction_bool','value'),\
-            dash.dependencies.State('ruptures','value')])
+            dash.dependencies.State('ruptures','value'),\
+            dash.dependencies.State('stages','value')])
 
-def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures):
+def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,stages):
 
     palette0=palette(config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=Q,C_vent=C_vent)
     produit0=produit(Tinit=Tinit,Nproduit=Nproduit,poids=poids,Cp_p=Cp_p,Sp=0.0820325,h=h,rho=1.25,palette=palette0)
+    chaine0=chaine(stages=stages)
     dt=30
     Ta = 0
     debut=200
-    if (ruptures=='alea'):
-        nb_ruptures=random.randint(2,6)
-        durees=[random.randint(20,50) for i in range(nb_ruptures)]
-        pauses=[random.randint(20,1000) for i in range(nb_ruptures)]
-        temperatures=[random.randint(15,30) for i in range(nb_ruptures)]
-    if (ruptures=='1'):
-        nb_ruptures = 3
-        durees = [50,60,70]
-        pauses = [140,110,250]
-        temperatures = [15,25,20]
-    if (ruptures=='2'):
-        nb_ruptures = 4
-        durees = [60,50,100,100]
-        pauses = [110,150,1200,170]
-        temperatures = [25,15,20,20]
-    T,T_air=construct_T_air_bis(dt,Ta,debut,durees,pauses,temperatures)
+    if (ruptures=='interface'):
+        T,T_air=constructT_air_avec_rupture_chaine(chaine=chaine0,dt=30,lambda_rupture=2.05)
+    if (ruptures=='no'):
+        T,T_air=constructT_air_sans_rupture_chaine(chaine=chaine0,dt=30)
+    if (ruptures=='abuse'):
+        T,T_air=constructT_air_abus(dt=30)
+
 
     Tprod,T_az=calcul_profils(palette0,produit0,T_air,dt,Vfr,conduction)
 
     fig=plotly.tools.make_subplots(rows=1,cols=1)
     fig['layout']['legend']={'x':1,'y':1}
     fig['layout']['title']={'text':'Profil de température simulé'}
-
     fig['layout']['clickmode']='event+select'
     fig.append_trace({
         'x':T/3600,
@@ -199,6 +216,7 @@ def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,rupt
         },1,1)
     fig['layout']['xaxis']={'title':'Temps (h)'}
     fig['layout']['yaxis']={'title':'Température (°C)'}
+    fig.update_yaxes(range=[-1, 27])
 
     return fig
 
