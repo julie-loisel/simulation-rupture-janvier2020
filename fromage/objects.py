@@ -36,7 +36,7 @@ class produit:
         self.rho=rho
 
 class chaine:
-    def __init__(self, stages=["plateforme","camion","chambre"], donnees="derens_2009"):
+    def __init__(self, stages=["plateforme","camion","chambre"], donnees="derens_2009",circuit=0):
         self.stages=stages
         self.donnees=donnees
         self.dict_donnees={
@@ -68,5 +68,7 @@ class chaine:
                               'intensite': {'loi':'normal', 'loc':4.4, 'scale':1.9}}
         }
                         }
+        self.circuit=circuit
+
 
 

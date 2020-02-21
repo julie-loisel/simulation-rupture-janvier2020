@@ -135,7 +135,7 @@ def constructT_air_avec_rupture(dt=30,lambda_rupture=1.5):
     return T,T_air
 
 
-def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.01):
+def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.9):
     """lambda_rupture: paramètre de la loi exponentielle qui génère la durée de la rupture
     """
     T_air=np.array([])
