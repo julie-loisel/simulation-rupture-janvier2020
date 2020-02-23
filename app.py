@@ -40,18 +40,18 @@ layout = dict(
 
 app.layout = \
         html.Div([ ### Main contener
-
-html.Div([ # HEADER
-                html.Div(#LOGO
+#HEADER
+html.Div(
+            [
+                html.Div(
                     [
                         html.Img(
                             src=app.get_asset_url("logoINRAE.png"),
                             id="plotly-image",
                             style={
-                                "height": "30px",
+                                "height": "60px",
                                 "width": "auto",
-                                "margin-top": "25px",
-                                "margin-right": "25px"
+                                "margin-bottom": "25px",
                             },
                         )
                     ],
@@ -61,12 +61,12 @@ html.Div([ # HEADER
                     [
                         html.Div(
                             [
-                                html.H3(
-                                    "Temperature abuse simulation",
-                                    style={"margin-bottom": "0px"},
+                                html.H1(
+                                    "Temperature abuse simulations",
+                                    style={"margin-bottom": "0px","align":"center"},
                                 ),
-                                html.H5(
-                                    "Second version", style={"margin-top": "0px"}
+                                html.H3(
+                                    "Second version", style={"margin-top": "0px","align":"center"}
                                 ),
                             ]
                         )
@@ -78,174 +78,45 @@ html.Div([ # HEADER
                     [
                         html.A(
                             html.Button("Learn More", id="learn-more-button"),
-                            href="https://github.com/julie-loisel/simulation-rupture-janvier2020/tree/new",
+                            href="https://plot.ly/dash/pricing/",
                         )
                     ],
-                    className="one-third column",
+                    #className="one-third column",
                     id="button",
                 ),
             ],
             id="header",
             className="row flex-display",
-            style={"margin-bottom": "35px"},
+            style={"margin-bottom": "25px"},
         ),
+#Princiapl
+html.Div(
+    [
+        html.Div([
+            html.P("Coefficient de ventilation : ",id='affichage_C_vent'),
+            dcc.Slider(
+                id='C_vent',
+                min=0.,
+                max=3,
+                step=0.01,
+                value=1.,
+                className="dcc_control"
+            ),
+        ],
+        id='parametres1',
+            className="pretty_container two columns"
 
-    html.Div([
-        #############Coté gauche###########
-    dcc.Markdown('''### Construction de la palette'''),
-    dcc.Markdown('''Deuxième version d'une application implémentée en Python par Julie Loisel
-    utilisant le modèle codé en Matlab par Denis Flick (AgroParisTech)
-    et repris par Steven Duret(IRSTEA).
-    '''),
-    dcc.Markdown(id='affichage_C_vent',style={'font-size':'170%'}),
-    dcc.Slider(
-        id='C_vent',
-        min=0.,
-        max=3,
-        step=0.01,
-        value=1.,
-        className="dcc_control"),
-
-    dcc.Markdown(id='affichage_Vfr',style={'font-size':'170%'}),
-    dcc.Slider(
-        id='Vfr',
-        min=0,
-        max=3,
-        step=0.1,
-        value=0.31,
-        className="dcc_control"),
-
-    dcc.Markdown(id='affichage_Q',style={'font-size':'170%'}),
-
-    dcc.Slider(
-        id='Q',
-        min=0.,
-        max=1.,
-        step=0.02,
-        value=0.04,
-        className="dcc_control"
-        ),
-dcc.Markdown('''###### Calculer la conduction'''),
-        dcc.RadioItems(id='conduction_bool',
-            options=[
-                {'label': 'Oui', 'value': 1},
-                {'label': 'Non', 'value': 0},
-
-            ],
-            value=1,
-        className="dcc_control"
-        ),
-dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
-
-        dcc.RadioItems(id='donnees',
-                       options=[
-                           {'label': "ANIA", 'value': 'ANIA'},
-                           {'label': "Morelli and Derens (2009)", 'value': 'derens_2009'}
-                       ],
-                       value='ANIA',
-        className="dcc_control"
-                       )
-        ,
-dcc.Markdown('''###### Schéma logistique'''),
-
-dcc.Dropdown(
-    id='circuit',
-    options=[
-        {'label': 'Direct Magasin', 'value': 1},
-        {'label': 'Via PTF distributeur', 'value': 2},
-        {'label': 'Via PTF groupage et distributeur', 'value': 3},
-        {'label': 'Via PTF groupage/dégroupage et distributeur', 'value': 4},
-        {'label': 'Via PTF groupage/dégroupage', 'value': 5},
-        {'label': 'Via PTF groupage', 'value': 6},
-        {'label': 'Via PTF dégroupage', 'value': 7}
+        )
 
     ],
-    value=1,
-    multi=False,
-        className="dcc_control"
-),
-
-        dcc.Markdown('''##### Ruptures'''),
-        dcc.RadioItems(id='ruptures',
-            options=[
-                {'label': "Scénario 1 : Rupture d'interface", 'value': 'interface'},
-                {'label': "Scénario 2 : Pas de rupture", 'value': 'no'},
-                {'label': "Scénario 3 : Abus (panne ou mauvaise gestion", 'value': 'abuse'},
-
-            ],
-            value='interface'
-        )
-    ],className="pretty_container four columns"),
+    id='principal',
+    className="row flex-display",
 
 
-
-    html.Div([
-    dcc.Markdown('''### Produit'''),
-    dcc.Markdown(id='affichage_Tinit',style={'font-size':'170%'}),
-    dcc.Slider(
-        id='Tinit',
-        min=-2,
-        max=45,
-        step=1,
-        value=0
-        ),
-    dcc.Markdown(id='affichage_Nproduit',style={'font-size':'170%'}),
-    dcc.Slider(
-        id='Nproduit',
-        min=1,
-        max=25,
-        step=1,
-        value=10
-        ),
-    dcc.Markdown(id='affichage_poids',style={'font-size':'170%'}),
-    dcc.Input(
-        id='poids',
-        type='number',
-        value=0.25
-        ),
-
-    dcc.Markdown(id='affichage_Cp_p',style={'font-size':'170%'}),
-    dcc.Input(
-        id='Cp_p',
-        placeholder='Heat capacity',
-        type='number',
-        value=3200
-        ),
-    dcc.Markdown(id='affichage_h',style={'font-size':'150%'}),
-    html.Div
-    ([html.Div([dcc.Input(
-                id='h',
-                type='number',
-                value=10
-                )])
-    ]),
-
-    html.Button('Calculer',id='calcule')],style={'font-size':'72.5%','width':'23%','display':'inline-block'}
-    ),
-    html.Div(
-
-        [
-        dcc.Graph(
-        id='basic-interactions')
-        ]
-        ,style={'width':'54%','display':'inline-block'}),
-    html.Button('Carte de chaleur', id='chaleur'),
-html.Div(
-
-        [
-        dcc.Graph(
-        id='plot_config'),
-    html.Img(src=app.get_asset_url('palette.png'),style={
-                                "height": "160px",
-                                "width": "auto",
-                                "margin-bottom": "25px",
-                            })
-        ]
-        ,style={'width':'100%','display':'inline-block'})
-    
-], id="mainContainer",
-    style={"display": "flex", "flex-direction": "column",'backgroundColor':' #ebf9f2'},
 )
+
+])
+
 
 
 
@@ -263,7 +134,6 @@ html.Div(
             dash.dependencies.State('conduction_bool','value'),\
             dash.dependencies.State('ruptures','value'),\
             dash.dependencies.State('circuit','value')])
-
 def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,circuit):
 
     palette0=palette(config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=Q,C_vent=C_vent)
