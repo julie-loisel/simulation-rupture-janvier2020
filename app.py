@@ -60,7 +60,7 @@ app.layout = html.Div([
         step=0.02,
         value=0.04
         ),
-dcc.Markdown('''##### Calculer la conduction'''),
+dcc.Markdown('''###### Calculer la conduction'''),
         dcc.RadioItems(id='conduction_bool',
             options=[
                 {'label': 'Oui', 'value': 1},
@@ -69,6 +69,8 @@ dcc.Markdown('''##### Calculer la conduction'''),
             ],
             value=1
         ),
+dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
+
         dcc.RadioItems(id='donnees',
                        options=[
                            {'label': "ANIA", 'value': 'ANIA'},
@@ -77,16 +79,22 @@ dcc.Markdown('''##### Calculer la conduction'''),
                        value='ANIA'
                        )
         ,
+dcc.Markdown('''###### Schéma logistique'''),
+
 dcc.Dropdown(
-    id='stages',
+    id='circuit',
     options=[
-        {'label': 'Transport', 'value': 'transport'},
-        {'label': 'Warehouse', 'value': 'warehouse'},
-        {'label': 'Platform', 'value': 'platform'},
-        {'label': 'Cold room', 'value': 'cold_room'}
+        {'label': 'Direct Magasin', 'value': 1},
+        {'label': 'Via PTF distributeur', 'value': 2},
+        {'label': 'Via PTF groupage et distributeur', 'value': 3},
+        {'label': 'Via PTF groupage/dégroupage et distributeur', 'value': 4},
+        {'label': 'Via PTF groupage/dégroupage', 'value': 5},
+        {'label': 'Via PTF groupage', 'value': 6},
+        {'label': 'Via PTF dégroupage', 'value': 7}
+
     ],
-    value=['platform', 'transport','cold_room'],
-    multi=True
+    value=1,
+    multi=False
 ),
 
         dcc.Markdown('''##### Ruptures'''),
@@ -150,14 +158,15 @@ dcc.Dropdown(
 
         [
         dcc.Graph(
-        id='plot_config')
+        id='basic-interactions')
         ]
         ,style={'width':'54%','display':'inline-block'}),
-    html.Div(
+    html.Button('Carte de chaleur', id='chaleur'),
+html.Div(
 
         [
         dcc.Graph(
-        id='basic-interactions'),
+        id='plot_config'),
     html.Img(src='data:image/png;base64,{}'.format(encoded_image))
         ]
         ,style={'width':'100%','display':'inline-block'})
@@ -179,18 +188,18 @@ dcc.Dropdown(
             dash.dependencies.State('Vfr','value'),\
             dash.dependencies.State('conduction_bool','value'),\
             dash.dependencies.State('ruptures','value'),\
-            dash.dependencies.State('stages','value')])
+            dash.dependencies.State('circuit','value')])
 
-def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,stages):
+def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,circuit):
 
     palette0=palette(config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=Q,C_vent=C_vent)
     produit0=produit(Tinit=Tinit,Nproduit=Nproduit,poids=poids,Cp_p=Cp_p,Sp=0.0820325,h=h,rho=1.25,palette=palette0)
-    chaine0=chaine(stages=stages)
+    chaine0=chaine(circuit=circuit)
     dt=30
     Ta = 0
     debut=200
     if (ruptures=='interface'):
-        T,T_air=constructT_air_avec_rupture_chaine(chaine=chaine0,dt=30,lambda_rupture=2.05)
+        T,T_air=constructT_air_avec_rupture_chaine(chaine=chaine0,dt=30,lambda_rupture=0.9)
     if (ruptures=='no'):
         T,T_air=constructT_air_sans_rupture_chaine(chaine=chaine0,dt=30)
     if (ruptures=='abuse'):
@@ -227,8 +236,9 @@ def update_longeur(value):
 	return "longueur: {} cm".format(value)
 
 @app.callback(dash.dependencies.Output('plot_config',component_property='figure'),
-    [dash.dependencies.Input(component_id='basic-interactions',component_property='figure')])
-def update_config(figure):
+[dash.dependencies.Input('chaleur', 'n_clicks')],
+    state=[dash.dependencies.State(component_id='basic-interactions',component_property='figure')])
+def update_config(chaleur,figure):
 
     z=np.array([figure['data'][k]['y'][0] for k in range(1,19)]).reshape(3,6).T
     x=np.array(figure['data'][0]['x'])
@@ -289,7 +299,7 @@ def update_config(figure):
         }
     ]
     fig.update_layout(xaxis=axis_template,yaxis=axis_template,\
-                      width = 500, height = 500,\
+                      width = 500, height =600,\
                       scene=dict(
                           zaxis=dict(range=[-0.1, 6.8], autorange=False),
                           aspectratio=dict(x=1, y=1, z=1),

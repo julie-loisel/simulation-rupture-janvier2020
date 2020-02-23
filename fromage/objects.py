@@ -69,6 +69,18 @@ class chaine:
         }
                         }
         self.circuit=circuit
+        if self.circuit!=0:
+            self.stages = ["transport","warehouse"]
+        if (self.circuit!=1)&(self.circuit!=2):
+            self.stages=self.stages+["transport"]
+            if (self.circuit!=7):
+                self.stages = self.stages + ["platform"]
+        if (self.circuit!=7):
+            self.stages = self.stages + ["transport"]
+        if (self.circuit==4)|(self.circuit==5)|(self.circuit==7):
+            self.stages = self.stages + ["platform","transport"]
+
+
 
 
 
