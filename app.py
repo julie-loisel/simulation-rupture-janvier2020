@@ -26,7 +26,70 @@ colors = {
 image_filename = 'assets/palette.png' # replace with your own image
 encoded_image = base64.b64encode(open(image_filename, 'rb').read())
 app.config['suppress_callback_exceptions']=True
-app.layout = html.Div([
+
+layout = dict(
+    autosize=True,
+    automargin=True,
+    margin=dict(l=30, r=30, b=20, t=40),
+    hovermode="closest",
+    plot_bgcolor="#F9F9F9",
+    paper_bgcolor="#F9F9F9",
+    legend=dict(font=dict(size=10), orientation="h"),
+    title="Satellite Overview"
+)
+
+app.layout = \
+        html.Div([ ### Main contener
+
+html.Div([ # HEADER
+                html.Div(#LOGO
+                    [
+                        html.Img(
+                            src=app.get_asset_url("logoINRAE.png"),
+                            id="plotly-image",
+                            style={
+                                "height": "30px",
+                                "width": "auto",
+                                "margin-top": "25px",
+                                "margin-right": "25px"
+                            },
+                        )
+                    ],
+                    className="one-third column",
+                ),
+                html.Div(
+                    [
+                        html.Div(
+                            [
+                                html.H3(
+                                    "Temperature abuse simulation",
+                                    style={"margin-bottom": "0px"},
+                                ),
+                                html.H5(
+                                    "Second version", style={"margin-top": "0px"}
+                                ),
+                            ]
+                        )
+                    ],
+                    className="one-half column",
+                    id="title",
+                ),
+                html.Div(
+                    [
+                        html.A(
+                            html.Button("Learn More", id="learn-more-button"),
+                            href="https://github.com/julie-loisel/simulation-rupture-janvier2020/tree/new",
+                        )
+                    ],
+                    className="one-third column",
+                    id="button",
+                ),
+            ],
+            id="header",
+            className="row flex-display",
+            style={"margin-bottom": "35px"},
+        ),
+
     html.Div([
         #############Coté gauche###########
     dcc.Markdown('''### Construction de la palette'''),
@@ -40,8 +103,8 @@ app.layout = html.Div([
         min=0.,
         max=3,
         step=0.01,
-        value=1.
-        ),
+        value=1.,
+        className="dcc_control"),
 
     dcc.Markdown(id='affichage_Vfr',style={'font-size':'170%'}),
     dcc.Slider(
@@ -49,7 +112,8 @@ app.layout = html.Div([
         min=0,
         max=3,
         step=0.1,
-        value=0.31),
+        value=0.31,
+        className="dcc_control"),
 
     dcc.Markdown(id='affichage_Q',style={'font-size':'170%'}),
 
@@ -58,7 +122,8 @@ app.layout = html.Div([
         min=0.,
         max=1.,
         step=0.02,
-        value=0.04
+        value=0.04,
+        className="dcc_control"
         ),
 dcc.Markdown('''###### Calculer la conduction'''),
         dcc.RadioItems(id='conduction_bool',
@@ -67,7 +132,8 @@ dcc.Markdown('''###### Calculer la conduction'''),
                 {'label': 'Non', 'value': 0},
 
             ],
-            value=1
+            value=1,
+        className="dcc_control"
         ),
 dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
 
@@ -76,7 +142,8 @@ dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
                            {'label': "ANIA", 'value': 'ANIA'},
                            {'label': "Morelli and Derens (2009)", 'value': 'derens_2009'}
                        ],
-                       value='ANIA'
+                       value='ANIA',
+        className="dcc_control"
                        )
         ,
 dcc.Markdown('''###### Schéma logistique'''),
@@ -94,7 +161,8 @@ dcc.Dropdown(
 
     ],
     value=1,
-    multi=False
+    multi=False,
+        className="dcc_control"
 ),
 
         dcc.Markdown('''##### Ruptures'''),
@@ -107,8 +175,8 @@ dcc.Dropdown(
             ],
             value='interface'
         )
-    ],style={'font-size':'72.5%','width':'23%','display':'inline-block'}),
-##### RUPTURES #####
+    ],className="pretty_container four columns"),
+
 
 
     html.Div([
@@ -167,11 +235,17 @@ html.Div(
         [
         dcc.Graph(
         id='plot_config'),
-    html.Img(src='data:image/png;base64,{}'.format(encoded_image))
+    html.Img(src=app.get_asset_url('palette.png'),style={
+                                "height": "160px",
+                                "width": "auto",
+                                "margin-bottom": "25px",
+                            })
         ]
         ,style={'width':'100%','display':'inline-block'})
     
-],style={'backgroundColor':'#ecf2f9'})
+], id="mainContainer",
+    style={"display": "flex", "flex-direction": "column",'backgroundColor':' #ebf9f2'},
+)
 
 
 
