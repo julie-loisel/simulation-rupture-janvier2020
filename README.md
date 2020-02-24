@@ -10,7 +10,11 @@
 
 
 ## Simulation des ruptures
-
+| Step description      |    Parameter    |       ANIA | Morelli and Derens (2009)|
+| :------------ | :-------------: | -------------: |
+|Transport      |    Temperature (°C) : "$\textit{N}$"   |        Colonne |
+|Warehouse    |   Alignée au    |      Alignée à |
+|Platform        |     Centre      |         Droite |
 
 
 Pour toute remarque/suggestion/commentaire : [julie.loisel@agroparistech.fr](julie.loisel@agroparistech.fr)
