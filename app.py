@@ -87,11 +87,15 @@ html.Div(
             ],
             id="header",
             className="row flex-display",
-            style={"margin-bottom": "25px"},
+            style={"margin-bottom": "25px","display": "flex", "flex-direction": "row","justify-content":"space-evenly"},
         ),
 #Princiapl
 #thermal
 html.Div([
+    html.Div([
+        html.H6(""),
+        html.P("Application développée par Julie Loisel avec hahahha")
+    ],className="pretty_container"),
     ##Thermal model parameters
     html.Div([
 
@@ -141,8 +145,8 @@ html.Div([
         id='parametres1',
             className="pretty_container"
         ),
-    #product
-#ruptures
+
+    #ruptures
     html.Div([
     html.H6("Ruptures"),
 dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
@@ -237,11 +241,9 @@ html.Div([
         id='parametres2',
             className="pretty_container"
         )
+],className="row flex-display", style={"display": "flex", "flex-direction": "row","justify-content":"space-evenly"}),
+            # carte et plot
 
-
-
-],className="row flex-display"),
-#product et ruptures
 html.Div([
 html.Div([
 
@@ -249,7 +251,6 @@ html.Div([
         html.Div([
 
 
-#product parameters
 
         html.Div([
 
@@ -281,14 +282,15 @@ html.Div(
         dcc.Graph(
         id='basic-interactions',className="pretty_container",style={
                                 "height": "500px"})
-        ],className="nine columns"
+        ],className="ten columns"
     )
 
-],className="row flex-display"),
+],className="row flex-display", style={"display": "flex", "flex-direction": "row","justify-content":"space-evenly"}),
 
 html.Div([
     html.Div([
         html.H6("Calculer la carte de chaleur"),
+        html.P("L'affichage de la carte de chaleur est plus lourd, ce boutton permet de l'afficher."),
         html.Button('Carte de chaleur', id='chaleur')
     ],className="pretty_container"),
     html.Div([
@@ -296,7 +298,7 @@ html.Div([
         dcc.Graph(
             id='plot_config')
     ],className="pretty_container nine columns")
-],className="row flex-display")
+],className= "container", style={"display": "flex", "flex-direction": "row","justify-content":"space-between"})
 ])
 
 
