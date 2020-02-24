@@ -10,11 +10,21 @@
 
 
 ## Simulation des ruptures
-| Step description      |    Parameter    |       ANIA | Morelli and Derens (2009)|
+| Step description  |       ANIA | Morelli and Derens (2009)|
 | :------------ | :-------------: | -------------: |
-|Transport      |    Temperature (°C) : "$\textit{N}$"   |        Colonne |
-|Warehouse    |   Alignée au    |      Alignée à |
-|Platform        |     Centre      |         Droite |
-
+|Transport      |     Temperature (°C) : *N*(,) |     Temperature (°C) : *N*(,)|
+|                |   Time (days) :  *E*()            | Time (days) : *E*() |
+|Warehouse    |     Temperature (°C) : *N*(,) |     Temperature (°C) : *N*(,)|
+|                |   Time (days) : *E*()              | Time (days) : *E*() |
+|Platform        |     Temperature (°C) : *N*(,) |     Temperature (°C) : *N*(,)|
+|                |   Time (days) :  *E*()             | Time (days) : *E*() |
+|Cold room        |     Temperature (°C) : *N*(,) |     Temperature (°C) : *N*(,)|
+|                |   Time (days) :   *E*()            | Time (days) : *E*() |
+|Display cabinet       |     Temperature (°C) : *N*(,) |     Temperature (°C) : *N*(,)|
+|                |   Time (days) :    *E*()           | Time (days) : *E*() |
+|Transport by consumer     |     Temperature (°C) : *N*(,) |     Temperature (°C) : *N*(,)|
+|                |   Time (days) :     *E*()          | Time (days) : *E*() |
+|Domestic refrigerator |     Temperature (°C) : *N*(,) |     Temperature (°C) : *N*(,)|
+|                |   Time (days) :    *E*()           | Time (days) :*E*()  |
 
 Pour toute remarque/suggestion/commentaire : [julie.loisel@agroparistech.fr](julie.loisel@agroparistech.fr)
