@@ -78,7 +78,7 @@ html.Div(
                     [
                         html.A(
                             html.Button("Learn More", id="learn-more-button"),
-                            href="https://plot.ly/dash/pricing/",
+                            href="https://github.com/julie-loisel/simulation-rupture-janvier2020/tree/layout_test",
                         )
                     ],
                     #className="one-third column",
@@ -90,9 +90,12 @@ html.Div(
             style={"margin-bottom": "25px"},
         ),
 #Princiapl
-html.Div(
-    [
-        html.Div([
+#thermal
+html.Div([
+    ##Thermal model parameters
+    html.Div([
+
+            html.H6("Thermal model parameters",style={"align":"center"}),
             html.P("Coefficient de ventilation : ",id='affichage_C_vent'),
             dcc.Slider(
                 id='C_vent',
@@ -102,22 +105,199 @@ html.Div(
                 value=1.,
                 className="dcc_control"
             ),
+            html.P("",id='affichage_Vfr'),
+            dcc.Slider(
+                    id='Vfr',
+                    min=0,
+                    max=3,
+                    step=0.1,
+                    value=0.31),
+            html.P("",id="affichage_Q"),
+            dcc.Slider(
+                    id='Q',
+                    min=0.,
+                    max=1.,
+                    step=0.02,
+                    value=0.04
+                    ),
+            html.P("Conduction"),
+            dcc.RadioItems(id='conduction_bool',
+                        options=[
+                            {'label': 'Yes', 'value': 1},
+                            {'label': 'No', 'value': 0},
+
+                        ],
+                        value=1),
+
+
+
+
+
+
+
+
+
         ],
         id='parametres1',
-            className="pretty_container two columns"
+            className="pretty_container"
+        ),
+    #product
+#ruptures
+    html.Div([
+    html.H6("Ruptures"),
+dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
 
-        )
+        dcc.RadioItems(id='donnees',
+                       options=[
+                           {'label': "ANIA", 'value': 'ANIA'},
+                           {'label': "Morelli and Derens (2009)", 'value': 'derens_2009'}
+                       ],
+                       value='ANIA',
+    className="dcc_control"
+                       )
+        ,
+dcc.Markdown('''###### Schéma logistique'''),
+
+dcc.Dropdown(
+    id='circuit',
+    options=[
+        {'label': 'Direct Magasin', 'value': 1},
+        {'label': 'Via PTF distributeur', 'value': 2},
+        {'label': 'Via PTF groupage et distributeur', 'value': 3},
+        {'label': 'Via PTF groupage/dégroupage et distributeur', 'value': 4},
+        {'label': 'Via PTF groupage/dégroupage', 'value': 5},
+        {'label': 'Via PTF groupage', 'value': 6},
+        {'label': 'Via PTF dégroupage', 'value': 7}
 
     ],
+    value=1,
+    multi=False,
+    className="dcc_control"
+),
+
+        dcc.Markdown('''##### Ruptures'''),
+        dcc.RadioItems(id='ruptures',
+            options=[
+                {'label': "Scénario 1 : Rupture d'interface", 'value': 'interface'},
+                {'label': "Scénario 2 : Pas de rupture", 'value': 'no'},
+                {'label': "Scénario 3 : Abus (panne ou mauvaise gestion", 'value': 'abuse'},
+
+            ],
+            value='interface',
+    className="dcc_control"
+        )
+],className="pretty_container"),
+html.Div([
+
+        html.H6("Product parameters"),
+        html.P("Initial temperature :",id='affichage_Tinit'),
+        dcc.Slider(
+        id='Tinit',
+        min=-2,
+        max=45,
+        step=1,
+        value=0,
+            className="dcc_control"
+        ),
+        html.P(id='affichage_Nproduit'),
+        dcc.Slider(
+            id='Nproduit',
+            min=1,
+            max=25,
+            step=1,
+            value=10,
+        className="dcc_control"
+        ),
+        html.P(id='affichage_poids'),
+        dcc.Input(
+        id='poids',
+        type='number',
+        value=0.25,
+        className="dcc_control"
+
+        ),
+    html.P(id='affichage_Cp_p'),
+    dcc.Input(
+        id='Cp_p',
+        placeholder='Heat capacity',
+        type='number',
+        value=3200,
+        className="dcc_control"
+
+        ),
+        html.P(id="affichage_h"),
+        dcc.Input(
+                id='h',
+                type='number',
+                value=10,
+            className="dcc_control"),
+        html.Div([html.Button('Calculer',id='calcule')])
+
+        ],
+        id='parametres2',
+            className="pretty_container"
+        )
+
+
+
+],className="row flex-display"),
+#product et ruptures
+html.Div([
+html.Div([
+
+
+        html.Div([
+
+
+#product parameters
+
+        html.Div([
+
+            html.H6("Carte des zones de la palette"),
+            html.Img(
+                            src=app.get_asset_url("palette.png"),
+                            id="palette",
+                            style={
+                                "height": "400px",
+                                "width": "auto",
+                                "margin-bottom": "25px",
+                            },
+                        )])
+
+],
+    id="param1et2",className="pretty_container")
+
+
+
+
+],
     id='principal',
     className="row flex-display",
+),
 
+html.Div(
 
-)
+        [
+        dcc.Graph(
+        id='basic-interactions',className="pretty_container",style={
+                                "height": "500px"})
+        ],className="nine columns"
+    )
 
+],className="row flex-display"),
+
+html.Div([
+    html.Div([
+        html.H6("Calculer la carte de chaleur"),
+        html.Button('Carte de chaleur', id='chaleur')
+    ],className="pretty_container"),
+    html.Div([
+        html.H6("Carte de chaleur"),
+        dcc.Graph(
+            id='plot_config')
+    ],className="pretty_container nine columns")
+],className="row flex-display")
 ])
-
-
 
 
 @app.callback(
@@ -202,11 +382,11 @@ def update_config(chaleur,figure):
         zmid=4,colorbar=colorbar,\
         text=text)],name=str(value))
             for value in np.arange(0,time_total,step=25)]
-    
+
 
 
     fig=go.Figure(data=go.Heatmap(z=z,zmid=4,text=text,colorbar=colorbar,),frames=frames)
-    
+
     #fig = go.Heatmap(z,xgap=0.5,ygap=0.5,colorscale=[[0, 'rgb(0,0,255)']])
     fig['layout']['title']={'text':'Carte des produits dans la palette'}
     axis_template = dict(showgrid = False, zeroline = False,showticklabels = False,
