@@ -94,8 +94,13 @@ html.Div(
 html.Div([
     html.Div([
         html.H6(""),
-        html.P("Application développée par Julie Loisel avec hahahha")
-    ],className="pretty_container"),
+        dcc.Markdown("Application développée par Julie Loisel permettant "
+               "de simuler des profils de température"
+               "en choisissant le circuit logistique du produit."
+               "Les températures de l'air sont obtenues grâce à "
+               "la simulation des durées et températures "
+               "suivant des lois obtenues lors d'études terrain")
+    ],className="pretty_container three columns"),
     ##Thermal model parameters
     html.Div([
 
@@ -147,50 +152,7 @@ html.Div([
         ),
 
     #ruptures
-    html.Div([
-    html.H6("Ruptures"),
-dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
 
-        dcc.RadioItems(id='donnees',
-                       options=[
-                           {'label': "ANIA", 'value': 'ANIA'},
-                           {'label': "Morelli and Derens (2009)", 'value': 'derens_2009'}
-                       ],
-                       value='ANIA',
-    className="dcc_control"
-                       )
-        ,
-dcc.Markdown('''###### Schéma logistique'''),
-
-dcc.Dropdown(
-    id='circuit',
-    options=[
-        {'label': 'Direct Magasin', 'value': 1},
-        {'label': 'Via PTF distributeur', 'value': 2},
-        {'label': 'Via PTF groupage et distributeur', 'value': 3},
-        {'label': 'Via PTF groupage/dégroupage et distributeur', 'value': 4},
-        {'label': 'Via PTF groupage/dégroupage', 'value': 5},
-        {'label': 'Via PTF groupage', 'value': 6},
-        {'label': 'Via PTF dégroupage', 'value': 7}
-
-    ],
-    value=1,
-    multi=False,
-    className="dcc_control"
-),
-
-        dcc.Markdown('''##### Ruptures'''),
-        dcc.RadioItems(id='ruptures',
-            options=[
-                {'label': "Scénario 1 : Rupture d'interface", 'value': 'interface'},
-                {'label': "Scénario 2 : Pas de rupture", 'value': 'no'},
-                {'label': "Scénario 3 : Abus (panne ou mauvaise gestion", 'value': 'abuse'},
-
-            ],
-            value='interface',
-    className="dcc_control"
-        )
-],className="pretty_container"),
 html.Div([
 
         html.H6("Product parameters"),
@@ -234,13 +196,58 @@ html.Div([
                 id='h',
                 type='number',
                 value=10,
-            className="dcc_control"),
-        html.Div([html.Button('Calculer',id='calcule')])
+            className="dcc_control")
+
 
         ],
         id='parametres2',
             className="pretty_container"
-        )
+        ),
+html.Div([
+    html.H6("Ruptures"),
+dcc.Markdown('''###### Sources de données pour les lois de distribution'''),
+
+        dcc.RadioItems(id='donnees',
+                       options=[
+                           {'label': "ANIA", 'value': 'ANIA'},
+                           {'label': "Morelli and Derens (2009)", 'value': 'derens_2009'}
+                       ],
+                       value='ANIA',
+    className="dcc_control"
+                       )
+        ,
+dcc.Markdown('''###### Schéma logistique'''),
+
+dcc.Dropdown(
+    id='circuit',
+    options=[
+        {'label': 'Direct Magasin', 'value': 1},
+        {'label': 'Via PTF distributeur', 'value': 2},
+        {'label': 'Via PTF groupage et distributeur', 'value': 3},
+        {'label': 'Via PTF groupage/dégroupage et distributeur', 'value': 4},
+        {'label': 'Via PTF groupage/dégroupage', 'value': 5},
+        {'label': 'Via PTF groupage', 'value': 6},
+        {'label': 'Via PTF dégroupage', 'value': 7}
+
+    ],
+    value=1,
+    multi=False,
+    className="dcc_control"
+),
+
+        dcc.Markdown('''##### Ruptures'''),
+        dcc.RadioItems(id='ruptures',
+            options=[
+                {'label': "Scénario 1 : Rupture d'interface", 'value': 'interface'},
+                {'label': "Scénario 2 : Pas de rupture", 'value': 'no'},
+                {'label': "Scénario 3 : Abus (panne ou mauvaise gestion", 'value': 'abuse'},
+
+            ],
+            value='interface',
+    className="dcc_control"
+        ),
+html.Div([html.Button('Calculer',id='calcule')])
+],className="pretty_container"),
 ],className="row flex-display", style={"display": "flex", "flex-direction": "row","justify-content":"space-evenly"}),
             # carte et plot
 
