@@ -9,7 +9,7 @@
 
 Pour étudier les transferts d'air et de chaleur, une approche est souvent utilisée : CFD - computational fluid dynamics. Cette approche consiste à discrétiser très finement le domaine, et à résoudre un système d'équations qui décrivent les lois de la thermodynamique à respecter. Cette méthode est très précise car elle prend en compte de nombreux paramètres, mais est très coûteuse en temps et en mémoire. Des modèles simplifiés ont été développés pour obtenir des simulations plus rapidement. Un des modèle simplifié utilisé est le modèle zonal : on discrétise plus grossièrement l'équipement étudié. 
 
-Dans cette simulation, on utilise un modèle simplifié zonal validé expérimentalement : ce modèle a été développé lors de la thèse d'Anh Thu PHAM (sur des palettes de fromage). Pour simuler les ruptures, le code a été modifié par Steven Duret de façon à y introduire un régime transitoire et calculer la conduction.
+Dans cette simulation, on utilise un modèle simplifié zonal validé expérimentalement. Pour simuler les ruptures, le code a été modifié par Steven Duret de façon à y introduire un régime transitoire et calculer la conduction.
 
 #### Explication des paramètres du modèle
 ##### Modèle thermique
