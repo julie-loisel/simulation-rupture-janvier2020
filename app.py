@@ -71,7 +71,7 @@ html.Div(
                             ]
                         )
                     ],
-                    className="one-half column",
+                    className="one-third column",
                     id="title",
                 ),
                 html.Div(
@@ -82,6 +82,7 @@ html.Div(
                         )
                     ],
                     #className="one-third column",
+className="one-third column",
                     id="button",
                 ),
             ],
