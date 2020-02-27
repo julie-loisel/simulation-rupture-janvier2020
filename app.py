@@ -78,7 +78,7 @@ html.Div(
                     [
                         html.A(
                             html.Button("Learn More", id="learn-more-button"),
-                            href="https://github.com/julie-loisel/simulation-rupture-janvier2020/tree/layout_test",
+                            href="https://framagit.org/julie.loisel/simulation-de-ruptures",
                         )
                     ],
                     #className="one-third column",
