@@ -334,7 +334,6 @@ html.Div([
 def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,circuit):
 
     palette0=palette(config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=Q,C_vent=C_vent)
-    produit0=produit(Tinit=Tinit,Nproduit=Nproduit,poids=poids,Cp_p=Cp_p,Sp=0.0820325,h=h,rho=1.25,palette=palette0)
     chaine0=chaine(circuit=circuit)
     dt=30
     Ta = 0
@@ -345,6 +344,7 @@ def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,rupt
         T,T_air=constructT_air_sans_rupture_chaine(chaine=chaine0,dt=30)
     if (ruptures=='abuse'):
         T,T_air=constructT_air_abus(dt=30)
+    produit0=produit(Tinit=T_air[0],Nproduit=Nproduit,poids=poids,Cp_p=Cp_p,Sp=0.0820325,h=h,rho=1.25,palette=palette0)
 
 
     Tprod,T_az=calcul_profils(palette0,produit0,T_air,dt,Vfr,conduction)
