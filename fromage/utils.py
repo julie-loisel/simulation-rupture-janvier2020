@@ -28,14 +28,15 @@ def construct_Mcx_Mcy(config,Ce=0.07,Ci=0.0256,Cc=0.0128):
         Mcy = np.array([[0,Ci,Cc,Ci,Cc,Ci,0],
                [0,Ci,Cc,Ci,Cc,Ci,0],
                [0,Ci,Cc,Ci,Cc,Ci,0]])
-        #Mcy = np.array([[0,Ci,Cc,Ci,Cc,Ci,Ce],
-         #      [0,Ci,Cc,Ci,Cc,Ci,Ce],
-          #     [0,Ci,Cc,Ci,Cc,Ci,Ce]])
+       
         Mcx = np.array([np.ones(6)*0,#ou Cc ???
                np.ones(6)*Ci,
                np.ones(6)*Ci,
                np.ones(6)*0])
                #np.ones(6)*Ce])
+           #Mcy = np.array([[0,Ci,Cc,Ci,Cc,Ci,Ce],
+         #      [0,Ci,Cc,Ci,Cc,Ci,Ce],
+          #     [0,Ci,Cc,Ci,Cc,Ci,Ce]])                                           
 def construct_T_air(dt,tr1,T1,tr2=0,T2=0,tr3=0,T3=0):
     t00=240
     t0=640
