@@ -164,15 +164,7 @@ html.Div([
 html.Div([
 
         html.H6("Product parameters"),
-        html.P("Initial temperature :",id='affichage_Tinit'),
-        dcc.Slider(
-        id='Tinit',
-        min=-2,
-        max=45,
-        step=1,
-        value=0,
-            className="dcc_control"
-        ),
+        
         html.P(id='affichage_Nproduit'),
         dcc.Slider(
             id='Nproduit',
@@ -321,7 +313,6 @@ html.Div([
      dash.dependencies.Output('basic-interactions', 'figure'),
      [dash.dependencies.Input('calcule', 'n_clicks')],
      state=[dash.dependencies.State('Q', 'value'),\
-     dash.dependencies.State('Tinit', 'value'),\
      dash.dependencies.State('Nproduit', 'value'),\
      dash.dependencies.State('poids', 'value'),\
      dash.dependencies.State('Cp_p', 'value'),\
@@ -331,7 +322,7 @@ html.Div([
             dash.dependencies.State('conduction_bool','value'),\
             dash.dependencies.State('ruptures','value'),\
             dash.dependencies.State('circuit','value')])
-def update_data(calcule,Q,Tinit,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,circuit):
+def update_data(calcule,Q,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,circuit):
 
     palette0=palette(config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=Q,C_vent=C_vent)
     chaine0=chaine(circuit=circuit)

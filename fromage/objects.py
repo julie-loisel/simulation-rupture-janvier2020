@@ -2,7 +2,7 @@
 from fromage import utils
 
 class palette:
-    def __init__(self,config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=0.0,C_vent=1):
+    def __init__(self,config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=0.05,C_vent=1):
         self.l=l #longueur d'un carton
         self.L=L #largeur d'un carton
         self.nb_l=nb_l #nombre de zones dans un carton en longueur
@@ -25,7 +25,7 @@ class palette:
         self.Q=Q#puissance thermique par maille, 0 = pas de chauffe
         self.nb_zones=nb_L*nb_l
 class produit:
-    def __init__(self,Tinit=4,Nproduit=10,poids=0.25,Cp_p=3200,Sp=0.0820325,h=5,rho=1.25,palette=palette()):
+    def __init__(self,Tinit=4,Nproduit=10,poids=0.25,Cp_p=3200,Sp=0.0820325,h=3,rho=1.25,palette=palette()):
         self.Tinit=Tinit#température initiale du profuit
         self.Nproduit=Nproduit
         self.poids=poids

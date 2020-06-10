@@ -127,12 +127,14 @@ def calcul_Mci_Ce_V(I,J,config=1,Ce=0.07,Ci=0.0256,Cc=0.0128):
     Mci=np.zeros((I*J,I*J))
     Ce_V=np.zeros(I*J)
     Mci,_=calcul_M1_V1(Mci,Ce_V,Mcx,Mcy,Pa,I,J,e=0,f=0)
-    for k in range(1,I*J+1):
-        id_k=k-1
-        if ((k%J==1)|(k%J==0)):
-            Ce_V[id_k]+=Ce
-        if (k<J*(I-1)):
-            Ce_V[id_k]+=Ce
+    Ce_V[[0,5,6,12,13,14,15,16,17,11]]=Ce
+    #for k in range(1,I*J+1):
+       # id_k=k-1
+       # if ((k%J==1)|(k%J==0)):
+        #    Ce_V[id_k]+=Ce
+       # if (k<J*(I-1)):
+        #    Ce_V[id_k]+=Ce
+    print(Ce_V)
     return Mci,Ce_V
 
 
