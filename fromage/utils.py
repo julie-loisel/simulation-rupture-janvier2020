@@ -25,14 +25,17 @@ def construct_Sx_Sy(config,C_vent=1,S_h1=8.2e-4*2,S_h2=1.62e-3+6.9e-4*2,\
     return Sx,Sy
 def construct_Mcx_Mcy(config,Ce=0.07,Ci=0.0256,Cc=0.0128):
     if config==1:
-        
-        Mcy = np.array([[0,Ci,Cc,Ci,Cc,Ci,Ce],
-               [0,Ci,Cc,Ci,Cc,Ci,Ce],
-               [0,Ci,Cc,Ci,Cc,Ci,Ce]])
+        Mcy = np.array([[0,Ci,Cc,Ci,Cc,Ci,0],
+               [0,Ci,Cc,Ci,Cc,Ci,0],
+               [0,Ci,Cc,Ci,Cc,Ci,0]])
+        #Mcy = np.array([[0,Ci,Cc,Ci,Cc,Ci,Ce],
+         #      [0,Ci,Cc,Ci,Cc,Ci,Ce],
+          #     [0,Ci,Cc,Ci,Cc,Ci,Ce]])
         Mcx = np.array([np.ones(6)*0,#ou Cc ???
                np.ones(6)*Ci,
                np.ones(6)*Ci,
-               np.ones(6)*Ce])
+               np.ones(6)*0])
+               #np.ones(6)*Ce])
     
     return Mcx,Mcy
 def construct_T_air(dt,tr1,T1,tr2=0,T2=0,tr3=0,T3=0):
