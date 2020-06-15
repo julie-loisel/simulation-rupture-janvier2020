@@ -88,7 +88,6 @@ def constructT_air_sans_rupture_chaine(chaine,dt=30):
 
         T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
         t_tot = t_tot + int(t / dt) * dt
-        list_stages.append((stage,t))
     T = np.arange(0, t_tot, dt)
     return T, T_air,list_stages
 
