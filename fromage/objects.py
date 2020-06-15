@@ -36,7 +36,7 @@ class produit:
         self.rho=rho
 
 class chaine:
-    def __init__(self, stages=["plateforme","camion","chambre"], donnees="derens_2009",circuit=0):
+    def __init__(self, stages=[], donnees="derens_2009",circuit=0):
         self.stages=stages
         self.donnees=donnees
         self.dict_donnees={

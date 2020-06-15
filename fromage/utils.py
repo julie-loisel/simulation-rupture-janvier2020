@@ -80,13 +80,15 @@ def constructT_air_sans_rupture_chaine(chaine,dt=30):
     t_tot = 0
     stages = chaine.stages
     dict_donnees = chaine.dict_donnees[chaine.donnees]
+    list_stages=[]
     for stage in stages:
         T = generate(dict_donnees[stage]["intensite"])
         t = generate(dict_donnees[stage]["duree"]) * 3600*24
         T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
         t_tot = t_tot + int(t / dt) * dt
+        list_stages.append((stage,t))
     T = np.arange(0, t_tot, dt)
-    return T, T_air
+    return T, T_air,list_stages
 
 
 def constructT_air_sans_rupture(dt=30):
