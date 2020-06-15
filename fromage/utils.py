@@ -84,10 +84,11 @@ def constructT_air_sans_rupture_chaine(chaine,dt=30):
     for stage in stages:
         T = generate(dict_donnees[stage]["intensite"])
         t = generate(dict_donnees[stage]["duree"]) * 3600*24
-        list_stages.append((stage,t+t_tot))
 
         T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
         t_tot = t_tot + int(t / dt) * dt
+        list_stages.append((stage,t_tot))
+
     T = np.arange(0, t_tot, dt)
     return T, T_air,list_stages
 
@@ -155,16 +156,17 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
         t = generate(dict_donnees[stage]["duree"])* 3600*24
         T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
         t_tot = t_tot + int(t / dt) * dt
-        list_stages.append((stage,t+t_tot))
+        list_stages.append((stage,t_tot))
 
         if rupture==r:
             temp_rupture=np.random.randint(6,25)
             Temps_rupture=np.random.normal(loc=lambda_rupture,scale=0.05)*3600
-            list_stages.append(("rupture",Temps_rupture+t_tot))
 
             Temps=int(Temps_rupture/dt)
             T_air=np.concatenate([T_air,temp_rupture*np.ones(Temps)])
             t_tot=t_tot+Temps*dt
+            list_stages.append(("rupture",t_tot))
+
     T=np.arange(0,t_tot,dt)
     return T,T_air,list_stages
 
