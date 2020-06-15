@@ -160,7 +160,7 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
 
         if rupture==r:
             temp_rupture=np.random.randint(6,25)
-            Temps_rupture=np.random.normal(loc=lambda_rupture,scale=0.05)*3600
+            Temps_rupture=np.random.normal(loc=lambda_rupture,scale=0.05)*3600*24
 
             Temps=int(Temps_rupture/dt)
             T_air=np.concatenate([T_air,temp_rupture*np.ones(Temps)])
