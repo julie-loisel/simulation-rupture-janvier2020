@@ -134,7 +134,6 @@ def calcul_Mci_Ce_V(I,J,config=1,Ce=0.07,Ci=0.0256,Cc=0.0128):
         #    Ce_V[id_k]+=Ce
        # if (k<J*(I-1)):
         #    Ce_V[id_k]+=Ce
-    print(Ce_V)
     return Mci,Ce_V
 
 
