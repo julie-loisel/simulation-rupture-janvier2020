@@ -30,10 +30,11 @@ def generate_data(size,palette,produit,Vfr=0.31,proba_rupture=0.5,dt=30):
     data0=[]
     for nb_it in range(size):
         rupture=(np.random.random()<proba_rupture)*1
+        circuit=np.rupturendom.randint(8,size=1)
         if rupture:
-            T,T_air=utils.constructT_air_avec_rupture()
+            T,T_air,liste_stages=utils.constructT_air_avec_rupture_chaine(chaine=chaine(circuit=circuit))
         else:
-            T,T_air=utils.constructT_air_sans_rupture()
+            T,T_air,liste_stage=utils.constructT_air_sans_rupture_chaine(chaine=chaine(circuit=circuit))
         Tprod,T_az=calculs.calcul_profils(palette,produit,T_air,dt,Vfr)
         
         k=np.random.randint(1,19)
