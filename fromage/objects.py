@@ -2,7 +2,7 @@
 from fromage import utils
 
 class palette:
-    def __init__(self,config=1,l=0.57,L=0.25,nb_l=6,nb_L=3,Q=0.05,C_vent=1):
+    def __init__(self,config=1,l=0.57,L=0.25,nb_l=3,nb_L=2,Q=0.05,C_vent=1):
         self.l=l #longueur d'un carton
         self.L=L #largeur d'un carton
         self.nb_l=nb_l #nombre de zones dans un carton en longueur

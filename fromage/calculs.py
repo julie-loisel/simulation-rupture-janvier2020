@@ -225,7 +225,7 @@ def calcul_temperatures(M,T_air,dt,Qxm,Qym,Qxp,Qyp,palette,produit,conduction=Tr
         Tprod[:,n+1]=Tprod[:,n]+(h*Sp*(T_az[:,n]-Tprod[:,n])+Q+Hce+Hci)*(dt/mp/Cp_p)
     return Tprod,T_az
 
-def calcul_profils(palette,produit,T_air,dt,Vfr,conduction=True):
+def calcul_profils(palette,produit,T_air,dt=30,Vfr=0.31,conduction=True):
     Qx,Qy=calcul_hydraulique(palette,produit,Vfr)
     Qxp,Qxm,Qyp,Qym=utils.init_champs_temperature(Qx,Qy,produit)
     M=calcul_M(Qxm,Qym,Qxp,Qyp,produit,palette)
