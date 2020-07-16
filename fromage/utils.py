@@ -81,17 +81,20 @@ def constructT_air_sans_rupture_chaine(chaine,dt=30):
     stages = chaine.stages
     dict_donnees = chaine.dict_donnees[chaine.donnees]
     list_stages=[]
+    ccbreak_bool = np.array([],dtype=bool)
+
     for stage in stages:
         T = generate(dict_donnees[stage]["intensite"])
         t = generate(dict_donnees[stage]["duree"]) * 3600*24
-
-        T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
+        size_stage = int(t/dt)
+        T_air = np.concatenate([T_air, T * np.ones(size_stage)])
+        ccbreak_bool = np.concatenate([ccbreak_bool,np.zeros(size_stage,dtype=bool)])
         list_stages.append((stage,(t_tot)/3600))
 
         t_tot = t_tot + int(t / dt) * dt
 
     T = np.arange(0, t_tot, dt)
-    return T, T_air,list_stages
+    return T, T_air,list_stages,ccbreak_bool
 
 
 def constructT_air_sans_rupture(dt=30):
@@ -100,12 +103,15 @@ def constructT_air_sans_rupture(dt=30):
     T_camion,t_camion=np.random.normal(loc=3.3,scale=1.2),np.random.exponential(0.25)*3600*24
     T_chambre,t_chambre=np.random.normal(loc=3.4,scale=1.4),np.random.exponential(1.05)*3600*24
     T_air=np.array([])
+    ccbreak_bool = np.array([],dtype=bool)
     t_tot=0
     for T,t in zip([T_plateforme,T_camion,T_chambre],[t_plateforme,t_camion,t_chambre]):
-        T_air=np.concatenate([T_air,T*np.ones(int(t/dt))])
+        size_stage = int(t/dt)
+        T_air=np.concatenate([T_air,T*np.ones(size_stage)])
+        ccbreak_bool = np.concatenate([ccbreak_bool,np.zeros(size_stage,dtype=bool)])
         t_tot=t_tot+int(t/dt)*dt
     T=np.arange(0,t_tot,dt)
-    return T,T_air
+    return T,T_air,ccbreak_bool
 
 
 def constructT_air_abus(dt=30):
@@ -147,7 +153,9 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
     """lambda_rupture: paramètre de la loi exponentielle qui génère la durée de la rupture
     """
     T_air=np.array([])
-    ccbreak_bool = np.array([])
+    #ccbreak_bool : array de booléens True : rupture False : autre maillon
+    #si il y a un abus au sein d'un maillon, False
+    ccbreak_bool = np.array([],dtype=bool)
     list_stages=[]
     t_tot=0
     rupture=np.random.randint(0,len(chaine.stages)-1)
@@ -157,7 +165,7 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
         T = generate(dict_donnees[stage]["intensite"])
         t = generate(dict_donnees[stage]["duree"])* 3600*24
         T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
-        ccbreak_bool = np.concatenate([ccbreak_bool, np.zeros(int(t/dt))])
+        ccbreak_bool = np.concatenate([ccbreak_bool, np.zeros(int(t/dt),dtype=bool)])
         list_stages.append((stage,(t_tot)/3600))
 
         t_tot = t_tot + int(t / dt) * dt
@@ -167,11 +175,10 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
             Temps_rupture=np.random.normal(loc=lambda_rupture,scale=0.05)*3600
             Temps=int(Temps_rupture/dt)
             T_air=np.concatenate([T_air,temp_rupture*np.ones(Temps)])
-            ccbreak_bool = np.concatenate([ccbreak_bool, np.ones(int(Temps))])
+            ccbreak_bool = np.concatenate([ccbreak_bool, np.ones(int(Temps),dtype=bool)])
             list_stages.append(("rupture",(t_tot)/3600))
 
             t_tot=t_tot+Temps*dt
-
     T=np.arange(0,t_tot,dt)
     return T,T_air,list_stages,ccbreak_bool
 
