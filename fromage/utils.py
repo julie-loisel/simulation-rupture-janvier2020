@@ -147,6 +147,7 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
     """lambda_rupture: paramètre de la loi exponentielle qui génère la durée de la rupture
     """
     T_air=np.array([])
+    ccbreak_bool = np.array([])
     list_stages=[]
     t_tot=0
     rupture=np.random.randint(0,len(chaine.stages)-1)
@@ -156,6 +157,7 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
         T = generate(dict_donnees[stage]["intensite"])
         t = generate(dict_donnees[stage]["duree"])* 3600*24
         T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
+        ccbreak_bool = np.concatenate([ccbreak_bool, np.zeros(int(t/dt))])
         list_stages.append((stage,(t_tot)/3600))
 
         t_tot = t_tot + int(t / dt) * dt
@@ -163,15 +165,15 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
         if rupture==r:
             temp_rupture=np.random.randint(6,25)
             Temps_rupture=np.random.normal(loc=lambda_rupture,scale=0.05)*3600
-
             Temps=int(Temps_rupture/dt)
             T_air=np.concatenate([T_air,temp_rupture*np.ones(Temps)])
+            ccbreak_bool = np.concatenate([ccbreak_bool, np.ones(int(Temps))])
             list_stages.append(("rupture",(t_tot)/3600))
 
             t_tot=t_tot+Temps*dt
 
     T=np.arange(0,t_tot,dt)
-    return T,T_air,list_stages
+    return T,T_air,list_stages,ccbreak_bool
 
 def init_pression(palette,produit,Vfr=0.31,e=0,f=0,Pa=1):
     I,J=palette.I,palette.J
