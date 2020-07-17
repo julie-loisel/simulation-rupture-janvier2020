@@ -11,36 +11,42 @@ from adtk.metrics import recall,precision,iou,f1_score
 from adtk.data import to_events
 import time
 #### Modèle thermique
-circuit=np.random.randint(8,size=1)
 palette = palette()
 produit = produit()
-chaine = objects.chaine(circuit=circuit)
-T,T_air,liste_stages,ccbreak_bool=constructT_air_avec_rupture_chaine(chaine=chaine)
-Tprod,T_az=calculs.calcul_profils(palette,produit,T_air)
-#####
 
-Tprod_data = validate_series(pd.DataFrame(Tprod.T,index=pd.DatetimeIndex(T)))
-Taz_data = validate_series(pd.DataFrame(T_az.T,index=pd.DatetimeIndex(T)))
-ccbreak_bool= validate_series(pd.DataFrame(ccbreak_bool,index=pd.DatetimeIndex(T)))[0].astype(bool)
-T_air_data = validate_series(pd.DataFrame(T_air,index=pd.DatetimeIndex(T)))
-#########
+# data["T"] = pd.DatetimeIndex(data["T"])
+# print(data.dtypes)
+# print(data)
+# thresh = ThresholdAD(high = 5, low=-2)
+# anomalies = thresh.detect(data.loc[0].set_index("T")["T_produit_zone1"])
+# true = data.loc[0].set_index("T")["Rupture"]
+# print(precision(true,anomalies))
+t0 = time.time()
+for i in range(30):
+    circuit=np.random.randint(8,size=1)
+    chaine = objects.chaine(circuit=circuit)
+    T,T_air,liste_stages,ccbreak_bool=constructT_air_avec_rupture_chaine(chaine=chaine)
+    Tprod,T_az=calculs.calcul_profils(palette,produit,T_air)
+    #####
+    Tprod = pd.DataFrame(Tprod.T,\
+                         columns=["T_produit_zone"+str(i) for i in range(1,19)],\
+                         index = np.full(len(T),i,dtype=int))
+    T_az= pd.DataFrame(T_az.T,\
+                         columns=["T_air_zone"+str(i) for i in range(1,19)],\
+                         index = np.full(len(T),i,dtype=int))
 
-## CAS 1 :
-plt.plot(T,T_air)
-plt.show()
-threshold_produit = ThresholdAD(high=8, low=0)
-threshold_az = ThresholdAD(high=5, low=0)
-threshold_air = ThresholdAD(high=5, low=0)
+    ccbreak_bool = pd.DataFrame(ccbreak_bool,\
+                         columns=["Rupture"],\
+                         index = np.full(len(T),i,dtype=int))
 
-anomalies_produit = threshold_produit.detect(Tprod_data)
-anomalies_air = threshold_air.detect(T_air_data)[0]
-anomalies_az = threshold_az.detect(Taz_data)
+    T_air = pd.DataFrame(T_air,\
+                         columns = ["T_air"],\
+                         index = np.full(len(T),i,dtype=int))
+
+    data = pd.concat([Tprod,T_air,T_az,ccbreak_bool],axis=1)
+    data["T"]=T
+    data.to_csv("index_simulation.csv",mode='a')
 
 
-for metric in [precision,recall,iou]:
-    print(np.mean([metric(anomalies_produit[i], anomalies_az[i]) for i in range(18)]))
-print(np.mean([sklearn.metrics.f1_score(anomalies_produit[i], anomalies_az[i], labels=anomalies_az[i]) for i in range(18)]))
-for True_labels in [ccbreak_bool,anomalies_air]:
-    for Pred_labels in [anomalies_produit,anomalies_az]:
-        print(np.mean([metric(True_labels, Pred_labels[i]) for i in range(18)]))
-
+print("temps écoulé : {:.2f} min ".format((time.time()-t0)/60))
+print("ok")
