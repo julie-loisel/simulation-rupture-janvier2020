@@ -22,31 +22,38 @@ produit = produit()
 # true = data.loc[0].set_index("T")["Rupture"]
 # print(precision(true,anomalies))
 t0 = time.time()
-for i in range(30):
+headers = ["T_produit_zone"+str(i) for i in range(1,19)]\
+    + ["T_air_zone"+str(i) for i in range(1,19)]\
+    + ["Rupture"]\
+    + ["T_air"]\
+    + ["T"]\
+    + ["No"]
+data = pd.DataFrame(columns=headers)
+data.to_csv("index_simulation.csv", header=1)
+
+for i in range(1):
     circuit=np.random.randint(8,size=1)
     chaine = objects.chaine(circuit=circuit)
     T,T_air,liste_stages,ccbreak_bool=constructT_air_avec_rupture_chaine(chaine=chaine)
     Tprod,T_az=calculs.calcul_profils(palette,produit,T_air)
     #####
     Tprod = pd.DataFrame(Tprod.T,\
-                         columns=["T_produit_zone"+str(i) for i in range(1,19)],\
-                         index = np.full(len(T),i,dtype=int))
+                         columns=["T_produit_zone"+str(i) for i in range(1,19)])
     T_az= pd.DataFrame(T_az.T,\
-                         columns=["T_air_zone"+str(i) for i in range(1,19)],\
-                         index = np.full(len(T),i,dtype=int))
-
+                         columns=["T_air_zone"+str(i) for i in range(1,19)])
     ccbreak_bool = pd.DataFrame(ccbreak_bool,\
-                         columns=["Rupture"],\
-                         index = np.full(len(T),i,dtype=int))
+                         columns=["Rupture"])
 
     T_air = pd.DataFrame(T_air,\
-                         columns = ["T_air"],\
-                         index = np.full(len(T),i,dtype=int))
+                         columns = ["T_air"])
 
-    data = pd.concat([Tprod,T_air,T_az,ccbreak_bool],axis=1)
+    data = pd.concat([Tprod,T_az,ccbreak_bool,T_air],axis=1)
     data["T"]=T
-    data.to_csv("index_simulation.csv",mode='a')
+    data["No"]=i
+    data.to_csv("index_simulation.csv",mode='a',header=None)
 
 
 print("temps écoulé : {:.2f} min ".format((time.time()-t0)/60))
 print("ok")
+print(data.columns)
+print(data["Rupture"])
