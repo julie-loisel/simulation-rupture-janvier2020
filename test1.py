@@ -35,8 +35,8 @@ data = pd.read_csv("index_simulation1000.csv", dtype = dict_dtypes,index_col=0)
 
 headers_metric = ["No","Position","precision","recall","f1_score","iou","seuil"]
 data_metric = pd.DataFrame(columns=headers)
-data_metric["No"] = range(1000)
-for No in range(1000):
+data_metric["No"] = range(50)
+for No in range(50):
     data_=data[data["No"]==No]
     datetime_series = pd.to_datetime(data_['T'])
     datetime_index = pd.DatetimeIndex(datetime_series.values)
@@ -64,7 +64,7 @@ for No in range(1000):
 
     print("temps écoulé : {:.2f} min ".format((time.time() - t0) / 60))
 
-data_metric.to_csv("TresholdAD1000_ruptures.csv", header=1)
+data_metric.to_csv("TresholdAD50_ruptures.csv", header=1)
 
 print(data_metric.groupby("seuil").mean())
 
