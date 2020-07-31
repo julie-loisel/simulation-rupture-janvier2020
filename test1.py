@@ -29,14 +29,13 @@ dict_dtypes = {}
 for key,value in zip(headers,dtypes_list):
     dict_dtypes[key]=value
 
-data = pd.read_csv("index_simulation1000.csv", dtype = dict_dtypes,index_col=0)
-
+data = pd.read_csv("index_simulation10.csv", dtype = dict_dtypes,index_col=0)
+print(data)
 ######## Création du dataset des métriques ###########
 
 headers_metric = ["No","Position","precision","recall","f1_score","iou","seuil"]
-data_metric = pd.DataFrame(columns=headers)
-data_metric["No"] = range(50)
-for No in range(50):
+data_metric = pd.DataFrame(columns=headers_metric)
+for No in range(10):
     data_=data[data["No"]==No]
     datetime_series = pd.to_datetime(data_['T'])
     datetime_index = pd.DatetimeIndex(datetime_series.values)
@@ -53,8 +52,7 @@ for No in range(50):
             recall_ = recall(true, anomalies)
             f1_score_ = f1_score(true,anomalies)
             iou_ = iou(true,anomalies)
-
-            data_metric.append({'No': No,\
+            data_metric = data_metric.append({'No': No,\
                                 'Position' : i,\
                                 'precision' : precision_,\
                                 'recall' : recall_,\
@@ -62,10 +60,9 @@ for No in range(50):
                                 'iou' : iou_,\
                                 'seuil': t}, ignore_index=True)
 
-    print("temps écoulé : {:.2f} min ".format((time.time() - t0) / 60))
 
-data_metric.to_csv("TresholdAD50_ruptures.csv", header=1)
+data_metric.to_csv("TresholdAD10_ruptures.csv", header=1)
 
-print(data_metric.groupby("seuil").mean())
+print(data_metric)
 
 print("temps écoulé : {:.2f} min ".format((time.time()-t0)/60))

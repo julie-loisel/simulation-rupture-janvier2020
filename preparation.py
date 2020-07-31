@@ -29,9 +29,9 @@ headers = ["T_produit_zone"+str(i) for i in range(1,19)]\
     + ["T"]\
     + ["No"]
 data = pd.DataFrame(columns=headers)
-data.to_csv("index_simulation1000.csv", header=1)
+data.to_csv("index_simulation10.csv", header=1)
 
-for i in range(1000):
+for i in range(10):
     circuit=np.random.randint(8,size=1)
     chaine = objects.chaine(circuit=circuit)
     T,T_air,liste_stages,ccbreak_bool=constructT_air_avec_rupture_chaine(chaine=chaine)
@@ -50,7 +50,7 @@ for i in range(1000):
     data = pd.concat([Tprod,T_az,ccbreak_bool,T_air],axis=1)
     data["T"]=T
     data["No"]=i
-    data.to_csv("index_simulation.csv",mode='a',header=None)
+    data.to_csv("index_simulation10.csv",mode='a',header=None)
 
 
 print("temps écoulé : {:.2f} min ".format((time.time()-t0)/60))

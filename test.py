@@ -29,7 +29,7 @@ dict_dtypes = {}
 for key,value in zip(headers,dtypes_list):
     dict_dtypes[key]=value
 
-data = pd.read_csv("index_simulation1000.csv", dtype = dict_dtypes,index_col=0)
+data = pd.read_csv("index_simulation10.csv", dtype = dict_dtypes,index_col=0)
 
 ######## Création du dataset des métriques ###########
 
