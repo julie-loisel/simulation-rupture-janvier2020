@@ -29,9 +29,9 @@ headers = ["T_produit_zone"+str(i) for i in range(1,19)]\
     + ["T"]\
     + ["No"]
 data = pd.DataFrame(columns=headers)
-data.to_csv("index_simulation.csv", header=1)
+data.to_csv("index_simulation1000.csv", header=1)
 
-for i in range(1):
+for i in range(1000):
     circuit=np.random.randint(8,size=1)
     chaine = objects.chaine(circuit=circuit)
     T,T_air,liste_stages,ccbreak_bool=constructT_air_avec_rupture_chaine(chaine=chaine)
