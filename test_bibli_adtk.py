@@ -11,11 +11,14 @@ from adtk.data import to_events
 import time
 path = "/home/loisel/simulation-rupture-janvier2020/"
 
-data_metric = pd.read_csv(path + "TresholdAD3000_ruptures.csv")
+data_metric = pd.read_csv(path + "TresholdAD3000_ruptures_3000.csv")
 
 data_seuil = data_metric.groupby("seuil").mean()
 plt.plot(data_seuil.index,data_seuil["precision"],label = 'precision')
 plt.plot(data_seuil.index,data_seuil["recall"],label = 'recall')
-plt.plot(data_seuil.index,data_seuil["iou"],label = 'iou')
+# plt.plot(data_seuil.index,data_seuil["iou"],label = 'iou')
 plt.legend()
+plt.show()
+
+plt.plot(data_seuil.index,data_seuil["iou"],label = 'iou')
 plt.show()

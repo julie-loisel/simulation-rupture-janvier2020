@@ -30,11 +30,12 @@ headers = ["T_produit_zone"+str(i) for i in range(1,19)]\
     + ["No"]
 data = pd.DataFrame(columns=headers)
 path = "/home/loisel/simulation-rupture-janvier2020/"
-data.to_csv(path+"index_simulation3000.csv", header=1)
+name ="index_simulation3000_ANIA.csv"
+data.to_csv(path+name, header=1)
 
 for i in range(3000):
     circuit=np.random.randint(8,size=1)
-    chaine = objects.chaine(circuit=circuit)
+    chaine = objects.chaine(circuit=circuit,donnees='ANIA')
     T,T_air,liste_stages,ccbreak_bool=constructT_air_avec_rupture_chaine(chaine=chaine)
     Tprod,T_az=calculs.calcul_profils(palette,produit,T_air)
     #####
@@ -51,7 +52,7 @@ for i in range(3000):
     data = pd.concat([Tprod,T_az,ccbreak_bool,T_air],axis=1)
     data["T"]=T
     data["No"]=i
-    data.to_csv(path+"index_simulation3000.csv",mode='a',header=None)
+    data.to_csv(path+name,mode='a',header=None)
 
 
 print("temps écoulé : {:.2f} min ".format((time.time()-t0)/60))

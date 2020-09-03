@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from adtk.detector import ThresholdAD
 from adtk.data import validate_series
 from adtk.metrics import recall,precision,iou,f1_score
+from sklearn.metrics import confusion_matrix
 from adtk.data import to_events
 import time
 t0 = time.time()
@@ -34,9 +35,9 @@ data = pd.read_csv(path+"index_simulation3000.csv", dtype = dict_dtypes,index_co
 print(data)
 ######## Création du dataset des métriques ###########
 
-headers_metric = ["No","Position","precision","recall","f1_score","iou","seuil"]
+headers_metric = ["No","Position","precision","recall","f1_score","iou","seuil","FN","FP"]
 data_metric = pd.DataFrame(columns=headers_metric)
-for No in range(10):
+for No in range(3000):
     data_=data[data["No"]==No]
     datetime_series = pd.to_datetime(data_['T'])
     datetime_index = pd.DatetimeIndex(datetime_series.values)
@@ -53,16 +54,23 @@ for No in range(10):
             recall_ = recall(true, anomalies)
             f1_score_ = f1_score(true,anomalies)
             iou_ = iou(true,anomalies)
+            CM = confusion_matrix(true, anomalies)
+            TN = CM[0][0]
+            FN = CM[1][0]
+            TP = CM[1][1]
+            FP = CM[0][1]
             data_metric = data_metric.append({'No': No,\
                                 'Position' : i,\
                                 'precision' : precision_,\
                                 'recall' : recall_,\
                                 'f1_score' : f1_score_,\
                                 'iou' : iou_,\
-                                'seuil': t}, ignore_index=True)
+                                'seuil': t,\
+                                'FN':FN,\
+                                'FP':FP           }, ignore_index=True)
 
 
-data_metric.to_csv(path+"TresholdAD3000_ruptures.csv", header=1)
+data_metric.to_csv(path+"TresholdAD3000_ruptures_3000.csv", header=1)
 
 print(data_metric)
 
