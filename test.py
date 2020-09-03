@@ -8,9 +8,8 @@ from adtk.data import validate_series
 from adtk.metrics import recall,precision,iou,f1_score
 from adtk.data import to_events
 import time
-t0 = time.time()
+path = "/home/loisel/simulation-rupture-janvier2020/"
 
-### Lecture des données #########
 headers = ["T_produit_zone"+str(i) for i in range(1,19)]\
     + ["T_air_zone"+str(i) for i in range(1,19)]\
     + ["Rupture"]\
@@ -29,43 +28,21 @@ dict_dtypes = {}
 for key,value in zip(headers,dtypes_list):
     dict_dtypes[key]=value
 
-data = pd.read_csv("index_simulation10.csv", dtype = dict_dtypes,index_col=0)
+data = pd.read_csv(path+"index_simulation.csv", dtype = dict_dtypes,index_col=0)
+print(data["T"])
+print(data["Rupture"])
+thresh = ThresholdAD(high = 4, low=-2)
+data0 = data[data["No"]==0]
+datetime_series = pd.to_datetime(data0['T'])
 
-######## Création du dataset des métriques ###########
+# create datetime index passing the datetime series
+datetime_index = pd.DatetimeIndex(datetime_series.values)
 
-headers_metric = ["No","Position","precision","recall","f1_score","iou","seuil"]
-data_metric = pd.DataFrame(columns=headers)
-data_metric["No"] = range(1000)
-for No in range(1000):
-    data_=data[data["No"]==No]
-    datetime_series = pd.to_datetime(data_['T'])
-    datetime_index = pd.DatetimeIndex(datetime_series.values)
-    data_ = data_.set_index(datetime_index)
-    data_ = pd.DataFrame(data_, index=datetime_index)
-    data_ = validate_series(data_)
-    true = data_["Rupture"]
+data0=data0.set_index(datetime_index)
+data0 = pd.DataFrame(data0,index=datetime_index)
 
-    for t in np.linspace(1,10,20):
-        thresh = ThresholdAD(high = t)
-        for i in range(1,19):
-            anomalies = thresh.detect(data_["T_produit_zone"+str(i)])
-            precision_ = precision(true,anomalies)
-            recall_ = recall(true, anomalies)
-            f1_score_ = f1_score(true,anomalies)
-            iou_ = iou(true,anomalies)
+data0 = validate_series(data0)
 
-            data_metric.append({'No': No,\
-                                'Position' : i,\
-                                'precision' : precision_,\
-                                'recall' : recall_,\
-                                'f1_score' : f1_score_,\
-                                'iou' : iou_,\
-                                'seuil': t}, ignore_index=True)
-
-    print("temps écoulé : {:.2f} min ".format((time.time() - t0) / 60))
-
-data_metric.to_csv("TresholdAD1000_ruptures.csv", header=1)
-
-print(data_metric.groupby("seuil").mean())
-
-print("temps écoulé : {:.2f} min ".format((time.time()-t0)/60))
+anomalies = thresh.detect(data0["T_produit_zone1"])
+true = data0["Rupture"]
+print(precision(true,anomalies))

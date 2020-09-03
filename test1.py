@@ -9,6 +9,7 @@ from adtk.metrics import recall,precision,iou,f1_score
 from adtk.data import to_events
 import time
 t0 = time.time()
+path = "/home/loisel/simulation-rupture-janvier2020/"
 
 ### Lecture des données #########
 headers = ["T_produit_zone"+str(i) for i in range(1,19)]\
@@ -29,7 +30,7 @@ dict_dtypes = {}
 for key,value in zip(headers,dtypes_list):
     dict_dtypes[key]=value
 
-data = pd.read_csv("index_simulation10.csv", dtype = dict_dtypes,index_col=0)
+data = pd.read_csv(path+"index_simulation3000.csv", dtype = dict_dtypes,index_col=0)
 print(data)
 ######## Création du dataset des métriques ###########
 
@@ -61,7 +62,7 @@ for No in range(10):
                                 'seuil': t}, ignore_index=True)
 
 
-data_metric.to_csv("TresholdAD10_ruptures.csv", header=1)
+data_metric.to_csv(path+"TresholdAD3000_ruptures.csv", header=1)
 
 print(data_metric)
 

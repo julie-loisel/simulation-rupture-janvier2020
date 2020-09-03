@@ -1,0 +1,27 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+path = "/home/loisel/simulation-rupture-janvier2020/"
+
+## Lecture des données #########
+headers = ["T_produit_zone"+str(i) for i in range(1,19)]\
+    + ["T_air_zone"+str(i) for i in range(1,19)]\
+    + ["Rupture"]\
+    + ["T_air"]\
+    + ["T"]\
+    + ["No"]
+dtypes_list = ['float' for i in range(1,19)] \
+            + ['float' for i in range(1, 19)] \
+            + ['float'] \
+            + ['object']\
+            +['int']\
+            +['int']
+
+dict_dtypes = {}
+
+for key,value in zip(headers,dtypes_list):
+    dict_dtypes[key]=value
+
+data = pd.read_csv(path+"index_simulation.csv", dtype = dict_dtypes,index_col=0)
+plt.plot(data["T"],data["T_produit_zone1"])
+plt.show()
