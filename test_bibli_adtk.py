@@ -22,3 +22,13 @@ plt.show()
 
 plt.plot(data_seuil.index,data_seuil["iou"],label = 'iou')
 plt.show()
+
+plt.plot(data_seuil.index,data_seuil["FN"]+data_seuil["FP"],label = 'somme faux')
+plt.title("Somme des faux positifs et faux négatifs en fonction du seuil")
+plt.show()
+
+plt.plot(data_seuil.index,data_seuil["FN"],label = 'faux négatifs')
+plt.plot(data_seuil.index,data_seuil["FP"],label = 'faux positifs')
+plt.legend()
+plt.title("faux positifs et faux négatifs en fonction du seuil")
+plt.show()

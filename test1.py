@@ -32,12 +32,13 @@ for key,value in zip(headers,dtypes_list):
     dict_dtypes[key]=value
 
 data = pd.read_csv(path+"index_simulation3000.csv", dtype = dict_dtypes,index_col=0)
-print(data)
+#print(data)
 ######## Création du dataset des métriques ###########
 
-headers_metric = ["No","Position","precision","recall","f1_score","iou","seuil","FN","FP"]
+headers_metric = ["No","Position","precision","recall","f1_score","iou","seuil","FN","FP","TN","TP"]
 data_metric = pd.DataFrame(columns=headers_metric)
-for No in range(3000):
+data_metric.to_csv(path+"TresholdAD3000_ruptures_3000.csv", header=1)
+for No in np.random.random_integers(3000,size=(30)):
     data_=data[data["No"]==No]
     datetime_series = pd.to_datetime(data_['T'])
     datetime_index = pd.DatetimeIndex(datetime_series.values)
@@ -46,10 +47,10 @@ for No in range(3000):
     data_ = validate_series(data_)
     true = data_["Rupture"]
 
-    for t in np.linspace(1,10,20):
+    for t in np.linspace(2,9,20):
         thresh = ThresholdAD(high = t)
         for i in range(1,19):
-            anomalies = thresh.detect(data_["T_produit_zone"+str(i)])
+            anomalies = thresh.detect(data_["T_air_zone"+str(i)])
             precision_ = precision(true,anomalies)
             recall_ = recall(true, anomalies)
             f1_score_ = f1_score(true,anomalies)
@@ -59,6 +60,7 @@ for No in range(3000):
             FN = CM[1][0]
             TP = CM[1][1]
             FP = CM[0][1]
+            data_metric = pd.DataFrame(columns=headers_metric)
             data_metric = data_metric.append({'No': No,\
                                 'Position' : i,\
                                 'precision' : precision_,\
@@ -67,10 +69,12 @@ for No in range(3000):
                                 'iou' : iou_,\
                                 'seuil': t,\
                                 'FN':FN,\
-                                'FP':FP           }, ignore_index=True)
+                                'FP':FP, \
+                                'TN': TN, \
+                                'TP': TP}, ignore_index=True)
+            data_metric.to_csv(path+"TresholdAD3000_ruptures_3000.csv", header=None, mode="a")
 
-
-data_metric.to_csv(path+"TresholdAD3000_ruptures_3000.csv", header=1)
+#data_metric.to_csv(path+"TresholdAD3000_ruptures_3000.csv", header=1)
 
 print(data_metric)
 
