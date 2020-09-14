@@ -162,7 +162,7 @@ def constructT_air_avec_rupture_chaine(chaine,dt=30,lambda_rupture=0.3):
     stages = chaine.stages
     dict_donnees = chaine.dict_donnees[chaine.donnees]
     for r,stage in enumerate(stages):
-        T = generate(dict_donnees[stage]["intensite"])
+        T = abs(generate(dict_donnees[stage]["intensite"]))
         t = generate(dict_donnees[stage]["duree"])* 3600*24
         T_air = np.concatenate([T_air, T * np.ones(int(t / dt))])
         ccbreak_bool = np.concatenate([ccbreak_bool, np.zeros(int(t/dt),dtype=bool)])
