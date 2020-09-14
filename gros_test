@@ -1,0 +1,11 @@
+from preparation import preparation
+from test1 import detection_metrics
+import pandas as pd
+path = "/home/loisel/simulation-rupture-janvier2020/Vienne/"
+source_donnees = "ANIA"
+N=100
+
+name = preparation(N,source_donnees,path)
+definition = "cc_break_bool"
+methode = "threshold"
+detection_metrics(name,N,definition,methode,path)

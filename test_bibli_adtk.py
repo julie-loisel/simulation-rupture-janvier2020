@@ -9,9 +9,9 @@ from adtk.data import validate_series
 from adtk.metrics import recall,precision,iou,f1_score
 from adtk.data import to_events
 import time
-path = "/home/loisel/simulation-rupture-janvier2020/"
+path = "/home/loisel/simulation-rupture-janvier2020/Vienne/"
 
-data_metric = pd.read_csv(path + "TresholdAD3000_ruptures_3000.csv")
+data_metric = pd.read_csv(path + "cc_break_bool_threshold_simulation_ANIA_100")
 
 data_seuil = data_metric.groupby("seuil").mean()
 plt.plot(data_seuil.index,data_seuil["precision"],label = 'precision')
