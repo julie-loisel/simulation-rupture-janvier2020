@@ -330,9 +330,9 @@ def update_data(calcule,Q,Nproduit,poids,Cp_p,h,C_vent,Vfr,conduction,ruptures,c
     Ta = 0
     debut=200
     if (ruptures=='interface'):
-        T,T_air=constructT_air_avec_rupture_chaine(chaine=chaine0,dt=30,lambda_rupture=0.9)
+        T,T_air,list_stages,ccbreak_bool=constructT_air_avec_rupture_chaine(chaine=chaine0,dt=30,lambda_rupture=0.9)
     if (ruptures=='no'):
-        T,T_air=constructT_air_sans_rupture_chaine(chaine=chaine0,dt=30)
+        T,T_air,list_stages,ccbreak_bool=constructT_air_sans_rupture_chaine(chaine=chaine0,dt=30)
     if (ruptures=='abuse'):
         T,T_air=constructT_air_abus(dt=30)
     produit0=produit(Tinit=T_air[0],Nproduit=Nproduit,poids=poids,Cp_p=Cp_p,Sp=0.0820325,h=h,rho=1.25,palette=palette0)
