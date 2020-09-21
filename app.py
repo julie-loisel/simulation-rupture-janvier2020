@@ -156,7 +156,7 @@ html.Div([
 
         ],
         id='parametres1',
-            className="one-fourth column"
+            className="pretty_container one-fourth column"
         ),
 
     #ruptures
@@ -201,7 +201,7 @@ html.Div([
 
         ],
         id='parametres2',
-            className="one-fourth column"
+            className="pretty_container one-fourth column"
         ),
 html.Div([
     html.H6("Ruptures"),
@@ -247,7 +247,7 @@ dcc.Dropdown(
     className="dcc_control"
         ),
 html.Div([html.Button('Calculer',id='calcule')])
-],className="one-fourth column"),
+],className=" pretty_container one-fourth column"),
 ],className="row flex-display", style={"display": "flex", "flex-direction": "row","justify-content":"space-evenly"}),
             # carte et plot
 
