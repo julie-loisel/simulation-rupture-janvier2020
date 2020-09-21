@@ -93,22 +93,22 @@ className="one-third column",
 #Princiapl
 #thermal
 html.Div([
-    # html.Div([
-    #     html.H6(""),
-    #     dcc.Markdown("Application développée par Julie Loisel permettant "
-    #            "de simuler des profils de température. "),
-    #      dcc.Markdown(" La nouveauté par rapport à la "
-    #                  "[première version](https://simulation-rupture-janvier2020.herokuapp.com/) "
-    #                  "est la suivante : afin de coller aux données réelles, "
-    #                  "on construit un circuit logistique (ensemble de maillons successifs) : "
-    #                  "dans cette application sont proposés les circuits les plus courants observés "
-    #                  "(Guide des bonnes pratiques logistiques). "
-    #                  "On génère ensuite les durées et températures de chaque maillon "
-    #                  "à partir des lois de distributions observées dans des études terrains "
-    #                  "(choisir entre ANIA et Morelli and Derens (2009)."),
-    #     dcc.Markdown("Plus d'informations sont disponibles [ici](https://github.com/julie-loisel/simulation-rupture-janvier2020/tree/layout_test)"
-    #            )
-    # ],className="one-fourth column"),
+    html.Div([
+         html.H6(""),
+         dcc.Markdown("Application développée par Julie Loisel permettant "
+                "de simuler des profils de température. "),
+          dcc.Markdown(" La nouveauté par rapport à la "
+                      "[première version](https://simulation-rupture-janvier2020.herokuapp.com/) "
+                      "est la suivante : afin de coller aux données réelles, "
+                      "on construit un circuit logistique (ensemble de maillons successifs) : "
+                      "dans cette application sont proposés les circuits les plus courants observés "
+                      "(Guide des bonnes pratiques logistiques). "
+                      "On génère ensuite les durées et températures de chaque maillon "
+                      "à partir des lois de distributions observées dans des études terrains "
+                      "(choisir entre ANIA et Morelli and Derens (2009)."),
+         dcc.Markdown("Plus d'informations sont disponibles [ici](https://github.com/julie-loisel/simulation-rupture-janvier2020/tree/layout_test)"
+                )
+     ],className="pretty_container one-fourth column"),
     ##Thermal model parameters
     html.Div([
 
